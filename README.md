@@ -17,22 +17,18 @@ Follow these steps to use Packer and the DigitalOcean plugin to create a machine
 1. Clone this repository:
 
     ```bash
-    git clone https://github.com/your-username/your-repo.git
+    git clone https://github.com/adaanene/packer_tutorial.git
     ```
 
 2. Navigate to the repository directory:
 
     ```bash
-    cd your-repo
+    cd packer_tutorial
     ```
 
 3. Customize the `variables.json` file to set your DigitalOcean API token and other configuration options.
 
-4. Run Packer to create the machine image:
-
-    ```bash
-    packer build -var-file=variables.json main.pkr.hcl
-    ```
+4. Run Packer to create the machine image: build steps can be found [here](https://developer.hashicorp.com/packer/tutorials/aws-get-started/aws-get-started-build-image)
 
 ## Configuration
 
@@ -88,21 +84,63 @@ build {
 }
 ```
 
-### Variables (variables.json)
+### Variables (vars.pkr.hcl)
 
-Customize the variables in the `variables.json` file to suit your environment and requirements.
+Customize the variables in the `vars.pkr.hcl` file to suit your environment and requirements.
 
-```json
-{
-  "api_token": "your-digitalocean-api-token",
-  "droplet_name": "packer-droplet",
-  "image": "ubuntu-20-04-x64",
-  "region": "nyc1",
-  "size": "s-1vcpu-1gb",
-  "snapshot_name": "packer-snapshot",
-  "snapshot_regions": ["nyc1", "sfo2"],
-  "ssh_username": "ubuntu",
-  "tags": ["packer", "image"]
+```
+variable "api_token" {
+  description = "My digital ocean token"
+  type        = string
+  default     = env("DIGTALOCEAN_TOKEN")
+}
+
+variable "droplet_name" {
+  description = "The name of my droplet"
+  type        = string
+  default     = "ubuntu-nginx-test"
+}
+
+variable "image" {
+  description = "The desired image for packer"
+  type        = string
+  default     = "ubuntu-22-04-x64"
+}
+
+variable "region" {
+  description = "Desired region"
+  type        = string
+  default     = "nyc1"
+}
+
+variable "size" {
+  description = "Desired cpu and ram size for the droplet"
+  type        = string
+  default     = "s-1vcpu-1gb-amd"
+}
+
+variable "snapshot_name" {
+  description = "Name of the snapshot"
+  type        = string
+  default     = "ubuntu-nginx-std"
+}
+
+variable "snapshot_regions" {
+  description = "The snapshot regions"
+  type        = list(string)
+  default     = ["nyc1", "nyc3"]
+}
+
+variable "ssh_username" {
+  description = "Digital ocean default user"
+  type        = string
+  default     = "root"
+}
+
+variable "tags" {
+  description = "My favourite tags"
+  type        = list(string)
+  default     = ["dev", "packer", "cloud-team", "ubuntu", "2004"]
 }
 ```
 
